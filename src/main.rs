@@ -1,6 +1,7 @@
 use mouce::Mouse;
 use std::{thread, time::{self}};
 use rand::Rng;
+use std::env;
 
 fn calculer_angle(x1: f64,y1: f64,x2: f64,y2: f64) -> f64{
     let deltax: f64 = (x1 - x2).into();
@@ -9,8 +10,6 @@ fn calculer_angle(x1: f64,y1: f64,x2: f64,y2: f64) -> f64{
 
     return angle;
 }
-
-
 
 fn init_eater(xcrash: f64, ycrash: f64)
 {
@@ -23,6 +22,21 @@ fn init_eater(xcrash: f64, ycrash: f64)
 // }
 
 fn main() {
+
+    let mut max_x: f64 = 0.0;
+    let mut max_y: f64 = 0.0;
+    let mut argc = 0;
+
+    for argument in env::args() {
+        argc += 1;
+        println!("{argument}");
+        if argc == 2 {
+            max_x = argument.parse::<f64>().unwrap(); }
+        else if argc == 3 {
+            max_y = argument.parse::<f64>().unwrap(); }
+    }
+    if argc < 3 {
+        return (); }
     let mut eater_x:f64 = 1000.0;
     let mut eater_y:f64 = 1000.0;
     let mut status = 1; // 1 = charger la sourie 2 = balade
@@ -62,8 +76,8 @@ fn main() {
                 status = 2;
             }
             2=> {
-                let target_x:f64 = rng.gen_range(10.0, 2000.0);
-                let target_y:f64 = rng.gen_range(10.0, 2000.0);
+                let target_x:f64 = rng.gen_range(10.0, max_x);
+                let target_y:f64 = rng.gen_range(10.0, max_y);
 
                 let mut dist:f64 = 1000.0;
                 while dist > 20.0 {
